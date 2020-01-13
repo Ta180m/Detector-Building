@@ -25,17 +25,35 @@ inline double f2k(double f) { return c2k(f2c(f)); } // Fahrenheit to Kelvin
 inline double k2f(double k) { return c2f(k2c(k)); } // Kelvin to Fahrenheit
 
 
+// Utility functions
+// No C++ standard library :(
+void sort(int& a[], int n) {
+  // Bubble sort
+  // Slow but n < 30 so OK
+  for (int i = 0; i < n; i++) {
+    for (int j = 0; j < n - 1; j++) {
+      if (a[j] > a[j + 1]) {
+        int tmp = a[j];
+        a[j] = a[j + 1];
+        a[j + 1] = tmp;
+      }
+    }
+  }
+}
+
+
 // Calibration data
-// MUST be sorted or you will get garbage results
 const int n = 3, m = n / 3; // Number of data points, MUST be multiple of 3
-const double V[n] = { 2.5, 3.26, 3.96 }; // Voltage measurements
-const double T[n] = { 25, 39.15, 60 }; // Temperature measurements
+double V[n] = { 2.5, 3.26, 3.96 }; // Voltage measurements
+double T[n] = { 25, 39.15, 60 }; // Temperature measurements
 double V_mid[m]; // Stores each piecewise segment for binary search
 double A[m], B[m], C[m]; // Coeficients for each piecewise component
 
 
 // Calculations
 void calculate() {
+  sort(V, n);
+  sort(T, n);
   double R[n], L[n], Y[n], G[n];
   for (int i = 0; i < n; i++) R[i] = R_k * (V_in / V[i] - 1);
   for (int i = 0; i < n; i++) L[i] = log(R[i]);
