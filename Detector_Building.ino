@@ -1,5 +1,5 @@
 /*
- * Detector Building v2
+ * Detector Building
  * Code by Anthony Wang
  * Ladue High School Science Olympiad
  */
