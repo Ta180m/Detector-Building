@@ -25,11 +25,17 @@ inline double f2k(double f) { return c2k(f2c(f)); } // Fahrenheit to Kelvin
 inline double k2f(double k) { return c2f(k2c(k)); } // Kelvin to Fahrenheit
 
 
+// Analog to digital conversion
+inline double a2d(int a) { return V_in * a / analog_max; }
+inline int d2a(double d) { return d * analog_max / V_in; }
+
+  
 // Utility functions
 // No C++ standard library :(
 void sort(int& a[], int n) {
   // Bubble sort
   // Slow but n < 30 so OK
+  // Too lazy to implement a fast sort
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n - 1; j++) {
       if (a[j] > a[j + 1]) {
@@ -51,6 +57,7 @@ double A[m], B[m], C[m]; // Coeficients for each piecewise component
 
 
 // Calculations
+// Steinhart-hart stuff
 void calculate() {
   sort(V, n);
   sort(T, n);
@@ -62,7 +69,7 @@ void calculate() {
     G[i + 1] = (Y[i + 1] - Y[i]) / (L[i + 1] - L[i]);
     G[i + 2] = (Y[i + 2] - Y[i]) / (L[i + 2] - L[i]);
   }
-  for (int i = 0; i < n; i += 3) {
+  for (int i = 0; i < n; i += 3) { // Don't ask how this works
     C[i / 3] = (G[i + 2] - G[i + 1]) / (L[i + 2] - L[i + 1]) / (L[i] + L[i + 1] + L[i + 2]);
     B[i / 3] = G[i + 1] - C[i / 3] * (L[i] * L[i] + L[i] * L[i + 1] + L[i + 1] * L[i + 1]);
     A[i / 3] = Y[i] - L[i] * (B[i / 3] + L[i] * L[i] * C[i / 3]);
@@ -83,9 +90,9 @@ void setup() {
   pinMode(LED_G, OUTPUT);
   pinMode(LED_B, OUTPUT);
 
-  blink(LED_R);
-  blink(LED_G);
-  blink(LED_B);
+  // blink(LED_R);
+  // blink(LED_G);
+  // blink(LED_B);
 
   // Debug stuff
   /*for (int i = 0; i < m; i++) {
@@ -107,7 +114,7 @@ void setup() {
 // Main loop
 void loop() {
   int V_raw = analogRead(THERM); // Read in raw analog value
-  double V_out = V_in * V_raw / analog_max; // Voltage
+  double V_out = a2d(V_raw); // Convert analog to digital
   double R_t = R_k * (V_in / V_out - 1); // Thermistor resistance
 
   int s = 0;
@@ -147,7 +154,7 @@ void loop() {
   Serial.print(V_out);
   Serial.print(" Temperature (°C): ");
   Serial.print(C);
-  Serial.print(" Temperature (°F): ");
+  Serial.print(" Temperature (°F): "); // For reference
   Serial.print(F);
   
   // Debug stuff
