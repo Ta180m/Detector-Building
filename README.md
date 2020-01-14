@@ -1,4 +1,3 @@
-# Detector-Building
-Science Olympiad Detector Building
+# Detector Building
 
-Arduino code and other stuff for Science Olympiad Detector Building
+A repository of Ardiuno code and other resources for the 2020 Science Olympiad event Detector Building.
