@@ -32,7 +32,7 @@ inline int d2a(double d) { return d * analog_max / V_in; }
   
 // Utility functions
 // No C++ standard library :(
-void sort(int& a[], int n) {
+void sort(double a[], int n) {
   // Bubble sort
   // Slow but n < 30 so OK
   // Too lazy to implement a fast sort
