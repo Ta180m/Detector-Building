@@ -17,6 +17,14 @@ const int LED_R = 4, LED_G = 3, LED_B = 2, THERM = 0; // Device component pins
 const double R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
 
 
+// Calibration data
+const int n = 3, m = n / 3; // Number of data points, MUST be multiple of 3
+double V[n] = { 2.12, 3.26, 3.96 }; // Voltage measurements
+double T[n] = { 22.0, 39.15, 60 }; // Temperature measurements
+double V_mid[m]; // Stores each piecewise segment for binary search
+double A[m], B[m], C[m]; // Coefficients for each piecewise component
+
+
 // Temperature conversions
 inline double f2c(double f) { return (f - 32) * 5 / 9; } // Fahrenheit to Celsius
 inline double c2f(double c) { return c * 9 / 5 + 32; } // Celsius to Fahrenheit
@@ -47,14 +55,6 @@ void sort(double a[], int n) {
     }
   }
 }
-
-
-// Calibration data
-const int n = 3, m = n / 3; // Number of data points, MUST be multiple of 3
-double V[n] = { 2.12, 3.26, 3.96 }; // Voltage measurements
-double T[n] = { 22.0, 39.15, 60 }; // Temperature measurements
-double V_mid[m]; // Stores each piecewise segment for binary search
-double A[m], B[m], C[m]; // Coefficients for each piecewise component
 
 
 // Calculations
