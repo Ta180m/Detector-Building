@@ -1,0 +1,5 @@
+{
+    "sketch": "Detector_Building.ino",
+    "port": "COM3",
+    "board": "arduino:avr:uno"
+}

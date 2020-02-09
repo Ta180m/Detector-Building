@@ -51,8 +51,8 @@ void sort(double a[], int n) {
 
 // Calibration data
 const int n = 3, m = n / 3; // Number of data points, MUST be multiple of 3
-double V[n] = { 2.5, 3.26, 3.96 }; // Voltage measurements
-double T[n] = { 25, 39.15, 60 }; // Temperature measurements
+double V[n] = { 1.3, 3.26, 3.96 }; // Voltage measurements
+double T[n] = { 22.0, 39.15, 60 }; // Temperature measurements
 double V_mid[m]; // Stores each piecewise segment for binary search
 double A[m], B[m], C[m]; // Coefficients for each piecewise component
 
