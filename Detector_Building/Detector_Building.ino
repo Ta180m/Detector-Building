@@ -12,6 +12,7 @@
 
 
 // Constants
+const bool CALIB = false;
 const int LED_R = 4, LED_G = 3, LED_B = 2, THERM = 0; // Device component pins
 const double R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
 
@@ -94,8 +95,17 @@ void setup() {
   // blink(LED_G);
   // blink(LED_B);
 
+  calculate();
+
   // Debug stuff
-  /*for (int i = 0; i < m; i++) {
+  /*for (int i = 0; i < n; i++) {
+    Serial.print(V[i]);
+    Serial.print(" ");
+    Serial.print(T[i]);
+    Serial.print(" ");
+  }
+  Serial.println();
+  for (int i = 0; i < m; i++) {
     Serial.print("Segment lower bound: ");
     Serial.print(i ? V_mid[i - 1] : 0);
     Serial.print(" Segment upper bound: ");
@@ -115,6 +125,15 @@ void setup() {
 void loop() {
   int V_raw = analogRead(THERM); // Read in raw analog value
   double V_out = a2d(V_raw); // Convert analog to digital
+  if (CALIB) {
+      Serial.print("Raw analog reading: ");
+      Serial.print(V_raw);
+      Serial.print(" Voltage (V): ");
+      Serial.print(V_out);
+      Serial.println();
+      delay(500);
+      return;
+  }
   double R_t = R_k * (V_in / V_out - 1); // Thermistor resistance
 
   int s = 0;
@@ -165,4 +184,5 @@ void loop() {
 
   Serial.println();
   delay(500);
+  return;
 }
