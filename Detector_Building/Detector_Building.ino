@@ -12,7 +12,7 @@
 
 
 // Constants
-const bool CALIB = true; // Calibration mode
+const bool CALIB = false; // Calibration mode
 const int LED_R = 4, LED_G = 3, LED_B = 2, THERM = 0; // Device component pins
 const double R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
 
@@ -51,7 +51,7 @@ void sort(double a[], int n) {
 
 // Calibration data
 const int n = 3, m = n / 3; // Number of data points, MUST be multiple of 3
-double V[n] = { 1.3, 3.26, 3.96 }; // Voltage measurements
+double V[n] = { 2.12, 3.26, 3.96 }; // Voltage measurements
 double T[n] = { 22.0, 39.15, 60 }; // Temperature measurements
 double V_mid[m]; // Stores each piecewise segment for binary search
 double A[m], B[m], C[m]; // Coefficients for each piecewise component
@@ -137,7 +137,7 @@ void loop() {
   double R_t = R_k * (V_in / V_out - 1); // Thermistor resistance
 
   int s = 0;
-  while (s < m && V_out > V_mid[s + 1]) s++; // Find correct segment
+  while (s + 1 < m && V_out > V_mid[s + 1]) s++; // Find correct segment
   
   double logR_t = log(R_t);
   double K = 1.0 / (A[s] + B[s] * logR_t + C[s] * logR_t * logR_t * logR_t); // Steinhart-hart
@@ -171,6 +171,8 @@ void loop() {
   Serial.print(V_raw);
   Serial.print(" Voltage (V): ");
   Serial.print(V_out);
+  //Serial.print(" Resistance (Ohms): ");
+  //Serial.print(R_t);
   Serial.print(" Temperature (°C): ");
   Serial.print(C);
   Serial.print(" Temperature (°F): "); // For reference
