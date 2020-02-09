@@ -12,7 +12,7 @@
 
 
 // Constants
-const bool CALIB = false;
+const bool CALIB = true; // Calibration mode
 const int LED_R = 4, LED_G = 3, LED_B = 2, THERM = 0; // Device component pins
 const double R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
 
@@ -128,7 +128,7 @@ void loop() {
   if (CALIB) {
       Serial.print("Raw analog reading: ");
       Serial.print(V_raw);
-      Serial.print(" Voltage (V): ");
+      Serial.print("  Voltage (V): ");
       Serial.print(V_out);
       Serial.println();
       delay(500);
