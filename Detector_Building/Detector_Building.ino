@@ -16,7 +16,6 @@ const bool CALIB = false; // Calibration mode
 const int LED_R = 4, LED_G = 3, LED_B = 2, THERM = 0; // Device component pins
 const double R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
 
-
 // Calibration data
 const int n = 3, m = n / 3; // Number of data points, MUST be multiple of 3
 double V[n] = { 2.12, 3.26, 3.96 }; // Voltage measurements
@@ -85,6 +84,7 @@ void blink(int pin) {
   delay(1000);
   digitalWrite(pin, LOW);  
 }
+// More Arduino stuff
 void setup() {
   Serial.begin(9600);
   pinMode(LED_R, OUTPUT);
@@ -125,16 +125,19 @@ void setup() {
 void loop() {
   int V_raw = analogRead(THERM); // Read in raw analog value
   double V_out = a2d(V_raw); // Convert analog to digital
-  if (CALIB) {
-      Serial.print("Raw analog reading: ");
-      Serial.print(V_raw);
-      Serial.print("  Voltage (V): ");
-      Serial.print(V_out);
-      Serial.println();
-      delay(500);
-      return;
-  }
   double R_t = R_k * (V_in / V_out - 1); // Thermistor resistance
+  
+  if (CALIB) {
+    // Calibration mode
+    Serial.print("Raw analog reading: ");
+    Serial.print(V_raw);
+    Serial.print("  Voltage (V): ");
+    Serial.print(V_out);
+    Serial.println();
+    delay(500);
+    return;
+  }
+  
 
   int s = 0;
   while (s + 1 < m && V_out > V_mid[s + 1]) s++; // Find correct segment
@@ -144,27 +147,29 @@ void loop() {
   double C = k2c(K);
   double F = c2f(C);
 
+  
   // LED stuff
-  if (C <= 25) {
+  if (C <= 25) { // Cold
     digitalWrite(LED_R, LOW);
     digitalWrite(LED_G, LOW);
     digitalWrite(LED_B, HIGH);
   }
-  else if (C <= 50) {
+  else if (C <= 50) { // Medium
     digitalWrite(LED_R, LOW);
     digitalWrite(LED_G, HIGH);
     digitalWrite(LED_B, LOW);
   }
-  else if (C <= 75) {
+  else if (C <= 75) { // Hot
     digitalWrite(LED_R, HIGH);
     digitalWrite(LED_G, LOW);
     digitalWrite(LED_B, LOW);
   }
-  else {
+  else { // Something seriously wrong
     digitalWrite(LED_R, HIGH);
     digitalWrite(LED_G, HIGH);
     digitalWrite(LED_B, HIGH);
   }
+  
   
   // Output voltage, temperature
   Serial.print("Raw analog reading: ");
@@ -175,8 +180,9 @@ void loop() {
   //Serial.print(R_t);
   Serial.print(" Temperature (°C): ");
   Serial.print(C);
-  Serial.print(" Temperature (°F): "); // For reference
-  Serial.print(F);
+  // For reference
+  //Serial.print(" Temperature (°F): ");
+  //Serial.print(F);
   
   // Debug stuff
   /*Serial.print(" Segment lower bound: ");
