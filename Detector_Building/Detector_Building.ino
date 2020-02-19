@@ -98,7 +98,7 @@ void setup() {
   calculate();
 
   // Debug stuff
-  for (int i = 0; i < n; i++) {
+  /*for (int i = 0; i < n; i++) {
     Serial.print(V[i]);
     Serial.print(" ");
     Serial.print(T[i]);
@@ -117,7 +117,7 @@ void setup() {
     Serial.print(" C: ");
     Serial.print(C[i], 12);
     Serial.println();
-  }
+  }*/
 }
 
 
@@ -185,12 +185,12 @@ void loop() {
   //Serial.print(F);
   
   // Debug stuff
-  Serial.print(" Segment lower bound: ");
+  /*Serial.print(" Segment lower bound: ");
   Serial.print(V_mid[s]);
   Serial.print(" Segment upper bound: ");
   Serial.print(V_mid[s + 1]);
 
-  Serial.println();
+  Serial.println();*/
   delay(500);
   return;
 }
