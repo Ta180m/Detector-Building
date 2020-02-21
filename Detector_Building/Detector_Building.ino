@@ -17,9 +17,9 @@ const int LED_R = 4, LED_G = 3, LED_B = 2, THERM = 0; // Device component pins
 const double R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
 
 // Calibration data
-const int n = 3, m = n / 3; // Number of data points, MUST be multiple of 3
-double V[n] = { 2.12, 3.26, 3.96 }; // Voltage measurements
-double T[n] = { 22.0, 39.15, 60 }; // Temperature measurements
+const int n = 6, m = n / 3; // Number of data points, MUST be multiple of 3
+double V[n] = { 2.81, 3.31, 3.36, 3.81, 4.03, 4.21 }; // Voltage measurements
+double T[n] = { 18.5, 29.1, 33.1, 48.0, 59.0, 70.0 }; // Temperature measurements
 double V_mid[m]; // Stores each piecewise segment for binary search
 double A[m], B[m], C[m]; // Coefficients for each piecewise component
 
@@ -74,7 +74,7 @@ void calculate() {
     B[i / 3] = G[i + 1] - C[i / 3] * (L[i] * L[i] + L[i] * L[i + 1] + L[i + 1] * L[i + 1]);
     A[i / 3] = Y[i] - L[i] * (B[i / 3] + L[i] * L[i] * C[i / 3]);
   }
-  for (int i = 0; i < n; i += 3) V_mid[i / 3] = (i ? (V[i - 1] + V[i]) / 2 : V[i]);
+  for (int i = 0; i < n; i += 3) V_mid[i / 3] = (i ? (V[i - 1] + V[i]) / 2 : 0);
 }
 
 
@@ -107,9 +107,9 @@ void setup() {
   Serial.println();
   for (int i = 0; i < m; i++) {
     Serial.print("Segment lower bound: ");
-    Serial.print(i ? V_mid[i - 1] : 0);
-    Serial.print(" Segment upper bound: ");
     Serial.print(V_mid[i]);
+    Serial.print(" Segment upper bound: ");
+    Serial.print(V_mid[i + 1]);
     Serial.print(" A: ");
     Serial.print(A[i], 12);
     Serial.print(" B: ");
@@ -186,11 +186,11 @@ void loop() {
   
   // Debug stuff
   /*Serial.print(" Segment lower bound: ");
-  Serial.print(s ? V_mid[s - 1] : 0);
+  Serial.print(V_mid[s]);
   Serial.print(" Segment upper bound: ");
-  Serial.print(V_mid[s]);*/
+  Serial.print(V_mid[s + 1]);
 
-  Serial.println();
+  Serial.println();*/
   delay(500);
   return;
 }
