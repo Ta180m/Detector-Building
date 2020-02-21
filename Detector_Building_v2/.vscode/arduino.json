@@ -1,0 +1,6 @@
+{
+    "sketch": "Detector_Building_v2.ino",
+    "port": "COM3",
+    "board": "arduino:avr:uno",
+    "programmer": "AVRISP mkII"
+}
