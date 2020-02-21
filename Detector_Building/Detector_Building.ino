@@ -6,8 +6,7 @@
 
 
 /*
- * TODO:
- * BUG FIXING: Expect bugs!
+ * DON'T USE: The calibration method is known to be highly inaccurate
  */
 
 
