@@ -22,6 +22,9 @@ inline double k2f(double k) { return c2f(k2c(k)); } // Kelvin to Fahrenheit
 inline double a2d(int a) { return V_in * a / analog_max; }
 inline int d2a(double d) { return d * analog_max / V_in; }
 
+// Voltage to resistance conversion
+inline double v2r(double V_out) { return R_k * (V_in / V_out - 1); }
+
 // Utility functions
 // No C++ standard library :(
 void sort(double a[], int n) {

@@ -19,6 +19,8 @@ inline double k2f(double k);
 inline double a2d(int a);
 inline int d2a(double d);
 
+inline double v2r(double V_out);
+
 void sort(double a[], int n);
 
 void calculate();
