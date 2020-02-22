@@ -12,15 +12,15 @@
 #include <curveFitting.h>
 #include <detectorBuilding.h>
 
-const bool CALIB = true; // Calibration mode
-const int n = 3; // Number of data points
+const bool CALIB = false; // Calibration mode
+const int n = 4; // Number of data points
 const int m = 1; // Number of segments
-const int deg = 3; // Regression degree
+const int deg = 2; // Regression degree
 double V[n] = { // Voltage measurements
-  2.12, 3.26, 3.96
+  2.12, 3.26, 3.96, 4.1
 };
 double T[n] = { // Temperature measurements
-  22.0, 39.15, 60
+  22.0, 39.15, 60, 72
 };
 double coeff[m][deg + 1];
 
@@ -34,10 +34,33 @@ void setup() {
   sort(V, n);
   sort(T, n);
 
+  Serial.print(log(v2r(0.1)));
+  Serial.print(" ");
+  Serial.print(log(v2r(4.9)));
+  Serial.println();
+
   double x[n], y[n];
-  for (int i = 0; i < n; i++) x[i] = log(v2r(V[i]));
-  for (int i = 0; i < n; i++) y[i] = 1 / T[i];
-  for (int i = 0; i < m; i++) fitCurve(deg, n / m, x + i * n / m, y + i * n / m, deg + 1, coeff[i]);
+  for (int i = 0; i < n; i++) x[i] = log(v2r(V[i])) - 5;
+  for (int i = 0; i < n; i++) y[i] = 1 / c2k(T[i]);
+  for (int i = 0; i < n; i++) {
+    Serial.print(x[i], 12);
+    Serial.print(" ");
+    Serial.print(y[i], 12);
+    Serial.println();
+  }
+  for (int i = 0; i < m; i++) {
+    int ret = fitCurve(deg, n / m, x + i * n / m, y + i * n / m, deg + 1, coeff[i]);
+    if (ret == 0){ //Returned value is 0 if no error
+      char c = 'A';
+      Serial.println("Coefficients are:");
+      for (int j = 0; j <= deg; j++){
+        Serial.print(c++);
+        Serial.print(": ");
+        Serial.print(coeff[i][j], 12);
+        Serial.println();
+      }
+    }
+  }
 }
 
 
@@ -58,10 +81,10 @@ void loop() {
   int s = 0;
   while (s + 1 < m && V_out < (V[s * n / m - 1] + V[s * n / m]) / 2) s++; // Find correct segment
   
-  double logR = log(v2r(V_out));
+  double logR = log(v2r(V_out)) - 5;
   double sum = 0, prod = 1;
   for (int i = 0; i <= deg; i++) {
-    sum += coeff[s][i] * prod;
+    sum += coeff[s][deg - i] * prod;
     prod *= logR;
   }
   double K = 1 / sum;
@@ -102,6 +125,11 @@ void loop() {
   // For reference
   //Serial.print(" Temperature (°F): ");
   //Serial.print(F);
+  Serial.print(" s: ");
+  Serial.print(s);
+  Serial.print(" logR: ");
+  Serial.print(logR);
+  Serial.println();
   delay(500);
   return;
 }
