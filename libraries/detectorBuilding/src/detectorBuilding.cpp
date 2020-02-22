@@ -4,11 +4,10 @@
   Released into the public domain.
 */
 
+
 #include "Arduino.h"
 #include "detectorBuilding.h"
 
-const int LED_R = 4, LED_G = 3, LED_B = 2, THERM = 0; // Device component pins
-const double R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
 
 // Temperature conversions
 inline double f2c(double f) { return (f - 32) * 5 / 9; } // Fahrenheit to Celsius
@@ -18,12 +17,15 @@ inline double c2k(double c) { return c + 273.15; } // Celsius to Kelvin
 inline double f2k(double f) { return c2k(f2c(f)); } // Fahrenheit to Kelvin
 inline double k2f(double k) { return c2f(k2c(k)); } // Kelvin to Fahrenheit
 
+
 // Analog to digital conversion
 inline double a2d(int a) { return V_in * a / analog_max; }
 inline int d2a(double d) { return d * analog_max / V_in; }
 
+
 // Voltage to resistance conversion
 inline double v2r(double V_out) { return R_k * (V_in / V_out - 1); }
+
 
 // Utility functions
 // No C++ standard library :(
@@ -42,9 +44,10 @@ void sort(double a[], int n) {
   }
 }
 
+
 // Calculations: Steinhart-hart stuff
 // Probably unused but can include anyways
-void calculate() {
+/*void calculate() {
   sort(V, n);
   sort(T, n);
   double R[n], L[n], Y[n], G[n];
@@ -61,4 +64,4 @@ void calculate() {
     A[i / 3] = Y[i] - L[i] * (B[i / 3] + L[i] * L[i] * C[i / 3]);
   }
   for (int i = 0; i < n; i += 3) V_mid[i / 3] = (i ? (V[i - 1] + V[i]) / 2 : V[i]);
-}
+}*/

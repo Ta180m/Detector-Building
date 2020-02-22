@@ -9,6 +9,9 @@
 
 #include "Arduino.h"
 
+const int LED_R = 4, LED_G = 3, LED_B = 2, THERM = 0; // Device component pins
+const double R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
+
 inline double f2c(double f);
 inline double c2f(double c);
 inline double k2c(double k);
@@ -23,6 +26,6 @@ inline double v2r(double V_out);
 
 void sort(double a[], int n);
 
-void calculate();
+//void calculate();
 
 #endif
