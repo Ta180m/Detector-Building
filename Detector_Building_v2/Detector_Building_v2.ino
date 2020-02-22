@@ -34,18 +34,15 @@ void setup() {
   sort(V, n);
   sort(T, n);
 
-  /*Serial.print(log(v2r(0.1)));
-  Serial.print(" ");
-  Serial.print(log(v2r(4.9)));
-  Serial.println();*/
-
   double x[n], y[n];
   for (int i = 0; i < n; i++) x[i] = log(v2r(V[i])) - 5;
   for (int i = 0; i < n; i++) y[i] = 1 / c2k(T[i]);
   /*for (int i = 0; i < n; i++) {
+    Serial.print("(");
     Serial.print(x[i], 12);
-    Serial.print(" ");
+    Serial.print(", ");
     Serial.print(y[i], 12);
+    Serial.print(")");
     Serial.println();
   }*/
   for (int i = 0; i < m; i++) {
@@ -123,9 +120,9 @@ void loop() {
   Serial.print(" Temperature (°C): ");
   Serial.print(C);
   // For reference
-  //Serial.print(" Temperature (°F): ");
-  //Serial.print(F);
-  /*Serial.print(" s: ");
+  /*Serial.print(" Temperature (°F): ");
+  Serial.print(F);
+  Serial.print(" s: ");
   Serial.print(s);
   Serial.print(" logR: ");
   Serial.print(logR);*/
