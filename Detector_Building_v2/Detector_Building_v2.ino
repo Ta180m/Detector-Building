@@ -34,23 +34,23 @@ void setup() {
   sort(V, n);
   sort(T, n);
 
-  Serial.print(log(v2r(0.1)));
+  /*Serial.print(log(v2r(0.1)));
   Serial.print(" ");
   Serial.print(log(v2r(4.9)));
-  Serial.println();
+  Serial.println();*/
 
   double x[n], y[n];
   for (int i = 0; i < n; i++) x[i] = log(v2r(V[i])) - 5;
   for (int i = 0; i < n; i++) y[i] = 1 / c2k(T[i]);
-  for (int i = 0; i < n; i++) {
+  /*for (int i = 0; i < n; i++) {
     Serial.print(x[i], 12);
     Serial.print(" ");
     Serial.print(y[i], 12);
     Serial.println();
-  }
+  }*/
   for (int i = 0; i < m; i++) {
     int ret = fitCurve(deg, n / m, x + i * n / m, y + i * n / m, deg + 1, coeff[i]);
-    if (ret == 0){ //Returned value is 0 if no error
+    /*if (ret == 0){ //Returned value is 0 if no error
       char c = 'A';
       Serial.println("Coefficients are:");
       for (int j = 0; j <= deg; j++){
@@ -59,7 +59,7 @@ void setup() {
         Serial.print(coeff[i][j], 12);
         Serial.println();
       }
-    }
+    }*/
   }
 }
 
@@ -125,10 +125,10 @@ void loop() {
   // For reference
   //Serial.print(" Temperature (°F): ");
   //Serial.print(F);
-  Serial.print(" s: ");
+  /*Serial.print(" s: ");
   Serial.print(s);
   Serial.print(" logR: ");
-  Serial.print(logR);
+  Serial.print(logR);*/
   Serial.println();
   delay(500);
   return;
