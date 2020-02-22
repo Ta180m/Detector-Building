@@ -10,21 +10,21 @@
 
 
 // Temperature conversions
-inline double f2c(double f) { return (f - 32) * 5 / 9; } // Fahrenheit to Celsius
-inline double c2f(double c) { return c * 9 / 5 + 32; } // Celsius to Fahrenheit
-inline double k2c(double k) { return k - 273.15; } // Kelvin to Celsius
-inline double c2k(double c) { return c + 273.15; } // Celsius to Kelvin
-inline double f2k(double f) { return c2k(f2c(f)); } // Fahrenheit to Kelvin
-inline double k2f(double k) { return c2f(k2c(k)); } // Kelvin to Fahrenheit
+double f2c(double f) { return (f - 32) * 5 / 9; } // Fahrenheit to Celsius
+double c2f(double c) { return c * 9 / 5 + 32; } // Celsius to Fahrenheit
+double k2c(double k) { return k - 273.15; } // Kelvin to Celsius
+double c2k(double c) { return c + 273.15; } // Celsius to Kelvin
+double f2k(double f) { return c2k(f2c(f)); } // Fahrenheit to Kelvin
+double k2f(double k) { return c2f(k2c(k)); } // Kelvin to Fahrenheit
 
 
 // Analog to digital conversion
-inline double a2d(int a) { return V_in * a / analog_max; }
-inline int d2a(double d) { return d * analog_max / V_in; }
+double a2d(int a) { return V_in * a / analog_max; }
+int d2a(double d) { return d * analog_max / V_in; }
 
 
 // Voltage to resistance conversion
-inline double v2r(double V_out) { return R_k * (V_in / V_out - 1); }
+double v2r(double V_out) { return R_k * (V_in / V_out - 1); }
 
 
 // Utility functions

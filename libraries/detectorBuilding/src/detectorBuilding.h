@@ -12,17 +12,17 @@
 const int LED_R = 4, LED_G = 3, LED_B = 2, THERM = 0; // Device component pins
 const double R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
 
-inline double f2c(double f);
-inline double c2f(double c);
-inline double k2c(double k);
-inline double c2k(double c);
-inline double f2k(double f);
-inline double k2f(double k);
+double f2c(double f);
+double c2f(double c);
+double k2c(double k);
+double c2k(double c);
+double f2k(double f);
+double k2f(double k);
 
-inline double a2d(int a);
-inline int d2a(double d);
+double a2d(int a);
+int d2a(double d);
 
-inline double v2r(double V_out);
+double v2r(double V_out);
 
 void sort(double a[], int n);
 
