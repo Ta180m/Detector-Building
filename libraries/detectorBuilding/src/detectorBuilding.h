@@ -9,7 +9,7 @@
 
 #include "Arduino.h"
 
-const int LED_R = 4, LED_G = 3, LED_B = 2, THERM = 0; // Device component pins
+const int LED_R = 8, LED_G = 10, LED_B = 12, THERM = 0; // Device component pins
 const double R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
 
 double f2c(double f);
