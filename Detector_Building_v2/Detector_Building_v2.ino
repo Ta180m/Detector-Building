@@ -7,29 +7,34 @@
   |_____] |     |   |   |     \   |   | \  | |  ____       \  /  ______|
   |_____] |_____| __|__ |_____/ __|__ |  \_| |_____|        \/   |______
                                                                        
-   Code by Anthony Wang
-   Ladue High School Science Olympiad
+  Ladue Horton Watkins High School Science Olympiad
 */
 
 /*
-  TODO:
-  Numerical precision
+  TODO  
+  - Numerical precision
+
 */
+
 
 #include <curveFitting.h>
 #include <detectorBuilding.h>
 
-const bool CALIB = false; // Calibration mode
-const int n = 4; // Number of data points
+
+const bool DEBUG = 0; // Debug mode
+const int n = 5; // Number of data points
 const int m = 1; // Number of segments
 const int deg = 3; // Regression degree
+
 ld data[2 * n] = {
-//  V    T
-  2.70, 24.0,
-  2.90, 30.0,
-  3.10, 36.0,
-  3.50, 50.0
-};
+//   V     T
+    2.25, 20.4,
+    3.66, 48.0,
+    2.95, 32.7,
+    3.91, 49.4,
+    4.22, 66.9
+}; // Number of data points is (last line number - 30)
+
 ld coeff[m][deg + 1], V[n], T[n];
 
 
@@ -50,17 +55,19 @@ void setup() {
   ld x[n], y[n];
   for (int i = 0; i < n; i++) x[i] = log(v2r(V[i])) - 7;
   for (int i = 0; i < n; i++) y[i] = 1000 / c2k(T[i]);
-  /*for (int i = 0; i < n; i++) {
-    Serial.print("{");
-    Serial.print((double)x[i], 12);
-    Serial.print(", ");
-    Serial.print((double)y[i], 12);
-    Serial.print("},");
-    Serial.println();
-  }*/
+  if (DEBUG) {
+    for (int i = 0; i < n; i++) {
+      Serial.print("{");
+      Serial.print((double)x[i], 12);
+      Serial.print(", ");
+      Serial.print((double)y[i], 12);
+      Serial.print("},");
+      Serial.println();
+    }
+  }
   for (int i = 0; i < m; i++) {
     int ret = fitCurve(deg, n/m, x+i*n/m, y+i*n/m, deg + 1, coeff[i]);
-    /*if (ret == 0) { // Returned value is 0 if no error
+    if (DEBUG && ret == 0) { // Returned value is 0 if no error
       char c = 'A';
       Serial.println("Coefficients are:");
       for (int j = 0; j <= deg; j++){
@@ -69,7 +76,7 @@ void setup() {
         Serial.print((double)coeff[i][j], 12);
         Serial.println();
       }
-    }*/
+    }
   }
 }
 
@@ -77,16 +84,6 @@ void setup() {
 void loop() {
   int V_raw = analogRead(THERM); // Read in raw analog value
   ld V_out = a2d(V_raw);
-  if (CALIB) {
-    // Calibration mode
-    Serial.print("Raw analog reading: ");
-    Serial.print(V_raw);
-    Serial.print("  Voltage (V): ");
-    Serial.print((double)V_out);
-    Serial.println();
-    delay(500);
-    return;
-  }
 
   int s = 0; // Find correct segment
   while (s + 1 < m && V_out < (V[s*n/m-1] + V[s*n/m]) / 2) s++;
@@ -132,13 +129,8 @@ void loop() {
   Serial.print((double)V_out);
   Serial.print(" Temperature (°C): ");
   Serial.print((double)C);
-  // For reference
-  /*Serial.print(" Temperature (°F): ");
-  Serial.print(F);
-  Serial.print(" s: ");
-  Serial.print(s);
-  Serial.print(" logR: ");
-  Serial.print(logR);*/
+  //Serial.print(" logR: ");
+  //Serial.print(logR);
   Serial.println();
   delay(500);
   return;
