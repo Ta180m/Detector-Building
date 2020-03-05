@@ -1,5 +1,12 @@
 /*
-   Detector Building v2
+  ______  _______ _______ _______ _______ _______  _____   ______       
+  |     \ |______    |    |______ |          |    |     | |_____/       
+  |_____/ |______    |    |______ |_____     |    |_____| |    \_       
+                                                                        
+  ______  _     _ _____ ______  _____ __   _  ______      _    _ _______
+  |_____] |     |   |   |     \   |   | \  | |  ____       \  /  ______|
+  |_____] |_____| __|__ |_____/ __|__ |  \_| |_____|        \/   |______
+                                                                       
    Code by Anthony Wang
    Ladue High School Science Olympiad
 */
@@ -50,7 +57,7 @@ void setup() {
     Serial.println();
   }*/
   for (int i = 0; i < m; i++) {
-    int ret = fitCurve(deg, n / m, x + i * n / m, y + i * n / m, deg + 1, coeff[i]);
+    int ret = fitCurve(deg, n/m, x+i*n/m, y+i*n/m, deg + 1, coeff[i]);
     /*if (ret == 0) { // Returned value is 0 if no error
       char c = 'A';
       Serial.println("Coefficients are:");
@@ -79,8 +86,8 @@ void loop() {
     return;
   }
 
-  int s = 0;
-  while (s + 1 < m && V_out < (V[s * n / m - 1] + V[s * n / m]) / 2) s++; // Find correct segment
+  int s = 0; // Find correct segment
+  while (s + 1 < m && V_out < (V[s*n/m-1] + V[s*n/m]) / 2) s++;
   
   ld logR = log(v2r(V_out)) - 7;
   ld sum = 0, prod = 1;
