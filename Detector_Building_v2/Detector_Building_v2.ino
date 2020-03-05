@@ -13,20 +13,22 @@
 
 /*
   TODO:
-  New calibration method using cubic regression
+  Numerical precision
 */
 
 #include <curveFitting.h>
 #include <detectorBuilding.h>
 
 const bool CALIB = false; // Calibration mode
-const int n = 17; // Number of data points
+const int n = 4; // Number of data points
 const int m = 1; // Number of segments
 const int deg = 3; // Regression degree
 ld data[2 * n] = {
 //  V    T
-  2.70, 24.0
-  
+  2.70, 24.0,
+  2.90, 30.0,
+  3.10, 36.0,
+  3.50, 50.0
 };
 ld coeff[m][deg + 1], V[n], T[n];
 
