@@ -9,7 +9,7 @@
 #include <Arduino.h>
 #include "curveFitting.h"
 
-void printMat(const char *s, double*m, int n){
+void printMat(const char *s, ld*m, int n){
   Serial.println(s);
   char buf[40];
   for (int i = 0; i < n; i++) {
@@ -21,7 +21,7 @@ void printMat(const char *s, double*m, int n){
   }
 }
 
-void showmat(const char *s, double **m, int n){
+void showmat(const char *s, ld **m, int n){
   Serial.println(s);
   char buf[40];
   for (int i = 0; i < n; i++) {
@@ -33,13 +33,13 @@ void showmat(const char *s, double **m, int n){
   }
 }
 
-void cpyArray(double *src, double*dest, int n){
+void cpyArray(ld *src, ld*dest, int n){
   for (int i = 0; i < n*n; i++){
     dest[i] = src[i];
   }
 }
 
-void subCol(double *mat, double* sub, uint8_t coln, uint8_t n){
+void subCol(ld *mat, ld* sub, uint8_t coln, uint8_t n){
   if (coln >= n) return;
   for (int i = 0; i < n; i++){
     mat[(i*n)+coln] = sub[i];
@@ -47,7 +47,7 @@ void subCol(double *mat, double* sub, uint8_t coln, uint8_t n){
 }
 
 /*Determinant algorithm taken from https://codeforwin.org/2015/08/c-program-to-find-determinant-of-matrix.html */
-int trianglize(double **m, int n)
+int trianglize(ld **m, int n)
 {
   int sign = 1;
   for (int i = 0; i < n; i++) {
@@ -57,12 +57,12 @@ int trianglize(double **m, int n)
         max = row;
     if (max) {
       sign = -sign;
-      double *tmp = m[i];
+      ld *tmp = m[i];
       m[i] = m[max], m[max] = tmp;
     }
     if (!m[i][i]) return 0;
     for (int row = i + 1; row < n; row++) {
-      double r = m[row][i] / m[i][i];
+      ld r = m[row][i] / m[i][i];
       if (!r) continue;
       for (int col = i; col < n; col ++)
         m[row][col] -= m[i][col] * r;
@@ -71,9 +71,9 @@ int trianglize(double **m, int n)
   return sign;
 }
  
-double det(double *in, int n, uint8_t prnt)
+ld det(ld *in, int n, uint8_t prnt)
 {
-  double *m[n];
+  ld *m[n];
   m[0] = in;
  
   for (int i = 1; i < n; i++)
@@ -83,7 +83,7 @@ double det(double *in, int n, uint8_t prnt)
   if (!sign)
     return 0;
   if(prnt) showmat("Upper triangle", m, n);
-  double p = 1;
+  ld p = 1;
   for (int i = 0; i < n; i++)
     p *= m[i][i];
   return p * sign;
@@ -91,11 +91,11 @@ double det(double *in, int n, uint8_t prnt)
 /*End of Determinant algorithm*/
 
 //Raise x to power
-double curveFitPower(double base, int exponent){
+ld curveFitPower(ld base, int exponent){
   if (exponent == 0){
     return 1;
   } else {
-    double val = base;
+    ld val = base;
     for (int i = 1; i < exponent; i++){
       val = val * base;
     }
@@ -103,18 +103,18 @@ double curveFitPower(double base, int exponent){
   }
 }
 
-int fitCurve (int order, int nPoints, double py[], int nCoeffs, double *coeffs) {
+int fitCurve (int order, int nPoints, ld py[], int nCoeffs, ld *coeffs) {
   uint8_t maxOrder = MAX_ORDER;
   if (nCoeffs != order + 1) return ORDER_AND_NCOEFFS_DO_NOT_MATCH; 	// no of coefficients is one larger than the order of the equation
   if (nCoeffs > maxOrder || nCoeffs < 2) return ORDER_INCORRECT; 		//matrix memory hard coded for max of 20 order, which is huge
   if (nPoints < 1) return NPOINTS_INCORRECT; 							//Npoints needs to be positive and nonzero
   int i, j;
-  double T[MAX_ORDER] = {0}; //Values to generate RHS of linear equation
-  double S[MAX_ORDER*2+1] = {0}; //Values for LHS and RHS of linear equation
-  double denom; //denominator for Cramer's rule, determinant of LHS linear equation
-  double x, y;
+  ld T[MAX_ORDER] = {0}; //Values to generate RHS of linear equation
+  ld S[MAX_ORDER*2+1] = {0}; //Values for LHS and RHS of linear equation
+  ld denom; //denominator for Cramer's rule, determinant of LHS linear equation
+  ld x, y;
   
-  double px[nPoints]; //Generate X values, from 0 to n
+  ld px[nPoints]; //Generate X values, from 0 to n
   for (i=0; i<nPoints; i++){
 	px[i] = i;
   }
@@ -130,14 +130,14 @@ int fitCurve (int order, int nPoints, double py[], int nCoeffs, double *coeffs) 
     }
   }
 
-  double masterMat[nCoeffs*nCoeffs]; //Master matrix LHS of linear equation
+  ld masterMat[nCoeffs*nCoeffs]; //Master matrix LHS of linear equation
   for (i = 0; i < nCoeffs ;i++){//index by matrix row each time
     for (j = 0; j < nCoeffs; j++){//index within each row
       masterMat[i*nCoeffs+j] = S[i+j];
     }
   }
   
-  double mat[nCoeffs*nCoeffs]; //Temp matrix as det() method alters the matrix given
+  ld mat[nCoeffs*nCoeffs]; //Temp matrix as det() method alters the matrix given
   cpyArray(masterMat, mat, nCoeffs);
   denom = det(mat, nCoeffs, CURVE_FIT_DEBUG);
   cpyArray(masterMat, mat, nCoeffs);
@@ -151,16 +151,16 @@ int fitCurve (int order, int nPoints, double py[], int nCoeffs, double *coeffs) 
   return 0;
 }
 
-int fitCurve (int order, int nPoints, double px[], double py[], int nCoeffs, double *coeffs) {
+int fitCurve (int order, int nPoints, ld px[], ld py[], int nCoeffs, ld *coeffs) {
   uint8_t maxOrder = MAX_ORDER;
   if (nCoeffs != order + 1) return ORDER_AND_NCOEFFS_DO_NOT_MATCH; 	//Number of coefficients is one larger than the order of the equation
   if(nCoeffs > maxOrder || nCoeffs < 2) return ORDER_INCORRECT; 		//Matrix memory hard coded for max of 20 order, which is huge
   if (nPoints < 1) return NPOINTS_INCORRECT; 							//Npoints needs to be positive and nonzero
   int i, j;
-  double T[MAX_ORDER] = {0}; //Values to generate RHS of linear equation
-  double S[MAX_ORDER*2+1] = {0}; //Values for LHS and RHS of linear equation
-  double denom; //denominator for Cramer's rule, determinant of LHS linear equation
-  double x, y;
+  ld T[MAX_ORDER] = {0}; //Values to generate RHS of linear equation
+  ld S[MAX_ORDER*2+1] = {0}; //Values for LHS and RHS of linear equation
+  ld denom; //denominator for Cramer's rule, determinant of LHS linear equation
+  ld x, y;
   
   for (i=0; i<nPoints; i++) {//Generate matrix elements
     x = px[i];
@@ -173,14 +173,14 @@ int fitCurve (int order, int nPoints, double px[], double py[], int nCoeffs, dou
     }
   }
 
-  double masterMat[nCoeffs*nCoeffs]; //Master matrix LHS of linear equation
+  ld masterMat[nCoeffs*nCoeffs]; //Master matrix LHS of linear equation
   for (i = 0; i < nCoeffs ;i++){//index by matrix row each time
     for (j = 0; j < nCoeffs; j++){//index within each row
       masterMat[i*nCoeffs+j] = S[i+j];
     }
   }
   
-  double mat[nCoeffs*nCoeffs]; //Temp matrix as det() method alters the matrix given
+  ld mat[nCoeffs*nCoeffs]; //Temp matrix as det() method alters the matrix given
   cpyArray(masterMat, mat, nCoeffs);
   denom = det(mat, nCoeffs, CURVE_FIT_DEBUG);
   cpyArray(masterMat, mat, nCoeffs);

@@ -8,23 +8,24 @@
 #define detectorBuilding_h
 
 #include "Arduino.h"
+typedef long double ld;
 
 const int LED_R = 8, LED_G = 10, LED_B = 12, THERM = 0; // Device component pins
-const double R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
+const ld R_k = 10000, V_in = 5, analog_max = 1023; // Device constants
 
-double f2c(double f);
-double c2f(double c);
-double k2c(double k);
-double c2k(double c);
-double f2k(double f);
-double k2f(double k);
+ld f2c(ld f);
+ld c2f(ld c);
+ld k2c(ld k);
+ld c2k(ld c);
+ld f2k(ld f);
+ld k2f(ld k);
 
-double a2d(int a);
-int d2a(double d);
+ld a2d(int a);
+int d2a(ld d);
 
-double v2r(double V_out);
+ld v2r(ld V_out);
 
-void sort(double a[], int n);
+void sort(ld a[], int n);
 
 //void calculate();
 

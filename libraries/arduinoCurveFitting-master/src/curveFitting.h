@@ -12,6 +12,8 @@
 #include <Arduino.h>
 #define MAX_ORDER 20
 
+typedef long double ld;
+
 #ifndef CURVE_FIT_DEBUG
 #define CURVE_FIT_DEBUG 0
 #endif
@@ -24,17 +26,17 @@ enum curveFitERROR{
 };
 
 /* Matrix Helper Functions */
-void printMat(const char *s, double*m, int n);
-void showmat(const char *s, double **m, int n);
-void cpyArray(double *src, double*dest, int n);
-void subCol(double *mat, double* sub, uint8_t coln, uint8_t n);
-double curveFitPower(double base, int exponent);
+void printMat(const char *s, ld*m, int n);
+void showmat(const char *s, ld **m, int n);
+void cpyArray(ld *src, ld*dest, int n);
+void subCol(ld *mat, ld* sub, uint8_t coln, uint8_t n);
+ld curveFitPower(ld base, int exponent);
 
 /* Determinant matrix functions */
-int trianglize(double **m, int n);
-double det(double *in, int n, uint8_t prnt);
+int trianglize(ld **m, int n);
+ld det(ld *in, int n, uint8_t prnt);
 
 /* Curve fitting functions */
-int fitCurve (int order, int nPoints, double py[], int nCoeffs, double *coeffs);
-int fitCurve (int order, int nPoints, double px[], double py[], int nCoeffs, double *coeffs);
+int fitCurve (int order, int nPoints, ld py[], int nCoeffs, ld *coeffs);
+int fitCurve (int order, int nPoints, ld px[], ld py[], int nCoeffs, ld *coeffs);
 #endif
