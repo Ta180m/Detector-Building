@@ -34,7 +34,7 @@ void sort(ld a[], int n) {
   // Too lazy to implement a fast sort
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < n - 1; j++) {
-      if (a[j] > a[j + 1]) {
+      if (a[j] < a[j + 1]) {
         ld tmp = a[j];
         a[j] = a[j + 1];
         a[j + 1] = tmp;
